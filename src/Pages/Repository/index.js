@@ -16,8 +16,7 @@ function Repository({ match }) {
 	const [issues, setIssues] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [page, setPage] = useState(1);
-	const [state, setState] = useState('open');
-	const [filters, setFilters] = useState([
+	const [filters] = useState([
 		{ state: 'all', label: 'Todas', active: true },
 		{ state: 'open', label: 'Abertas', active: false },
 		{ state: 'closed', label: 'Fechadas', active: false },
@@ -31,11 +30,13 @@ function Repository({ match }) {
 				api.get(`/repos/${repoName}`),
 				api.get(`/repos/${repoName}/issues`, {
 					params: {
-						state: filters.find((f) => f.active).state, // pega o state do active = true
+						state: filters.find((f) => f.active).state, // pega o state do active = )
 						per_page: 5,
 					},
 				}),
 			]);
+
+			console.log(filters.find((f) => f.active).state);
 
 			setRepo(repoData.data);
 			setIssues(issueData.data);
@@ -57,13 +58,13 @@ function Repository({ match }) {
 				},
 			});
 
-			console.log(`/repos/${repoName}/issues`, 'Page: ' + page);
+			console.log(filters[filterIndex].state);
 
 			setIssues(response.data);
 		}
 
 		loadIssue();
-	}, [filterIndex, filters, match.params.repository, page, state]);
+	}, [filterIndex, filters, match.params.repository, page]);
 
 	function handlePage(action) {
 		setPage(action === 'back' ? page - 1 : page + 1);
