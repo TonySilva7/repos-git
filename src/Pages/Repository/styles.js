@@ -95,12 +95,12 @@ export const IssuesList = styled.ul`
 				}
 
 				span {
-					background-color: #0d2636;
+					background-color: #ccc;
 					color: #fff;
-					border-radius: 4px;
+					border-radius: 50px;
 					font-size: 12px;
 					font-weight: 600px;
-					padding: 4px 7px;
+					padding: 3px 7px;
 					margin-left: 10px;
 				}
 			}

@@ -40,7 +40,7 @@ function Repository({ match }) {
 	return (
 		<Container>
 			<BackButton to='/'>
-				<FaArrowLeft color='#0d2636' size={30} />
+				<FaArrowLeft color='#0d2636' size={25} />
 			</BackButton>
 
 			<Owner>
@@ -60,7 +60,7 @@ function Repository({ match }) {
 									<span key={String(label.id)}>{label.name}</span>
 								))}
 							</strong>
-							<p>{issue.user.login}</p>
+							<p>@{issue.user.login}</p>
 						</div>
 					</li>
 				))}
