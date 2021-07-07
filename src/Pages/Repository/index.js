@@ -1,12 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import api from '../../services/api';
-import { BackButton, Container, IssuesList, Loading, Owner } from './styles';
+import {
+	BackButton,
+	Container,
+	FilterList,
+	IssuesList,
+	Loading,
+	Owner,
+	PageActions,
+} from './styles';
 
 function Repository({ match }) {
 	const [repo, setRepo] = useState({});
 	const [issues, setIssues] = useState([]);
 	const [loading, setLoading] = useState(true);
+	const [page, setPage] = useState(1);
+	const [state, setState] = useState('open');
+	const [filters, setFilters] = useState([
+		{ state: 'all', label: 'Todas', active: true },
+		{ state: 'open', label: 'Abertas', active: false },
+		{ state: 'closed', label: 'Fechadas', active: false },
+	]);
+	const [filterIndex, setFilterIndex] = useState(0);
 
 	useEffect(() => {
 		async function load() {
@@ -15,7 +31,7 @@ function Repository({ match }) {
 				api.get(`/repos/${repoName}`),
 				api.get(`/repos/${repoName}/issues`, {
 					params: {
-						state: 'open',
+						state: filters.find((f) => f.active).state, // pega o state do active = true
 						per_page: 5,
 					},
 				}),
@@ -27,7 +43,31 @@ function Repository({ match }) {
 		}
 
 		load();
-	}, [match.params.repository]);
+	}, [filters, match.params.repository]);
+
+	useEffect(() => {
+		async function loadIssue() {
+			const repoName = decodeURIComponent(match.params.repository);
+
+			const response = await api.get(`/repos/${repoName}/issues`, {
+				params: {
+					state: filters[filterIndex].state,
+					page: page,
+					per_page: 5,
+				},
+			});
+
+			console.log(`/repos/${repoName}/issues`, 'Page: ' + page);
+
+			setIssues(response.data);
+		}
+
+		loadIssue();
+	}, [filterIndex, filters, match.params.repository, page, state]);
+
+	function handlePage(action) {
+		setPage(action === 'back' ? page - 1 : page + 1);
+	}
 
 	if (loading) {
 		return (
@@ -35,6 +75,10 @@ function Repository({ match }) {
 				<h1>Carregando...</h1>
 			</Loading>
 		);
+	}
+
+	function handleFilter(index) {
+		setFilterIndex(index);
 	}
 
 	return (
@@ -48,6 +92,17 @@ function Repository({ match }) {
 				<h1>{repo.name}</h1>
 				<p>{repo.description}</p>
 			</Owner>
+
+			<FilterList numChild={filterIndex}>
+				{filters.map((filter, index) => (
+					<button
+						key={filter.label}
+						type='button'
+						onClick={() => handleFilter(index)}>
+						{filter.label}
+					</button>
+				))}
+			</FilterList>
 
 			<IssuesList>
 				{issues.map((issue) => (
@@ -65,6 +120,19 @@ function Repository({ match }) {
 					</li>
 				))}
 			</IssuesList>
+
+			<PageActions>
+				<button
+					type='button'
+					disabled={page < 2}
+					onClick={() => handlePage('back')}>
+					Voltar
+				</button>
+
+				<button type='button' onClick={() => handlePage('next')}>
+					Próxima
+				</button>
+			</PageActions>
 		</Container>
 	);
 }

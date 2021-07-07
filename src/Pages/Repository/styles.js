@@ -107,3 +107,41 @@ export const IssuesList = styled.ul`
 		}
 	}
 `;
+
+export const PageActions = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	button {
+		outline: 0;
+		border: 0;
+		background-color: #0d0232;
+		color: #fff;
+		padding: 5px 10px;
+		border-radius: 4px;
+
+		&:disabled {
+			cursor: not-allowed;
+			opacity: 0.5;
+		}
+	}
+`;
+
+export const FilterList = styled.div`
+	margin: 15px 0;
+
+	button {
+		outline: 0;
+		border: 0;
+		padding: 8px;
+		border-radius: 4px;
+		margin: 0 3px;
+
+		// pega o filho dinamicamente
+		&: nth-child(${(props) => props.numChild + 1}) {
+			background-color: #0071eb;
+			color: #fff;
+		}
+	}
+`;
