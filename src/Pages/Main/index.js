@@ -1,5 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { FaBars, FaGithub, FaPlusCircle, FaSpinner, FaTrash } from 'react-icons/fa';
+import {
+	FaBars,
+	FaGithub,
+	FaPlusCircle,
+	FaSpinner,
+	FaTrash,
+} from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import api from '../../services/api';
 import { Container, DeleteButton, Form, List, SubmitButton } from './styles';
@@ -89,7 +95,11 @@ function Main(props) {
 				/>
 
 				<SubmitButton loading={loading ? 1 : 0}>
-					{loading ? <FaSpinner color='#FFF' size={14} /> : <FaPlusCircle color='#FFF' size={17} />}
+					{loading ? (
+						<FaSpinner color='#FFF' size={14} />
+					) : (
+						<FaPlusCircle color='#FFF' size={17} />
+					)}
 				</SubmitButton>
 			</Form>
 
