@@ -36,8 +36,6 @@ function Repository({ match }) {
 				}),
 			]);
 
-			console.log(filters.find((f) => f.active).state);
-
 			setRepo(repoData.data);
 			setIssues(issueData.data);
 			setLoading(false);
